@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.fondeadora.mobile.jumio_flutter">
+
+    <application>
+        <activity
+            android:theme="@style/Theme.Netverify"
+            android:hardwareAccelerated="true"
+            android:name="com.jumio.nv.NetverifyActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
+    </application>
+</manifest>

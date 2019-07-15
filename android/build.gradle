@@ -1,0 +1,62 @@
+group 'com.fondeadora.mobile.jumio_flutter'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.2.71'
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://mobile-sdk.jumio.com' }
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 28
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    defaultConfig {
+        minSdkVersion 19
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+ext {
+    JUMIO_SDK_VERSION = "3.2.1"
+}
+
+dependencies {
+    implementation "com.jumio.android:core:${JUMIO_SDK_VERSION}@aar"
+    implementation "com.jumio.android:face:${JUMIO_SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv:${JUMIO_SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv-mrz:${JUMIO_SDK_VERSION}@aar"
+    implementation "com.jumio.android:nv-ocr:${JUMIO_SDK_VERSION}@aar"
+
+    implementation "com.facetec:zoom-authentication-hybrid:7.0.12@aar"
+
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.room:room-runtime:2.1.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
