@@ -6,7 +6,7 @@ class JumioFlutter {
   static const MethodChannel _channel =
       const MethodChannel('com.fondeadora.mobile/jumio_flutter');
 
-  static Future<bool> init(
+  static Future<Map> scanDocument(
     String apiKey,
     String apiSecret,
     String scanReference,
@@ -18,11 +18,7 @@ class JumioFlutter {
       "scanReference": scanReference,
       "userReference": userReference,
     };
-    return await _channel.invokeMethod('init', args);
-  }
-
-  static Future<Map> scanDocument() async {
-    var result = await _channel.invokeMethod('scanDocument');
+    var result = await _channel.invokeMethod('scanDocument', args);
     print(result);
     return result;
   }

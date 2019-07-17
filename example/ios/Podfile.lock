@@ -1,0 +1,33 @@
+PODS:
+  - Flutter (1.0.0)
+  - jumio_flutter (0.0.1):
+    - Flutter
+    - JumioMobileSDK
+    - JumioMobileSDK/Netverify
+  - JumioMobileSDK (3.2.0):
+    - JumioMobileSDK/JumioMobileSDK (= 3.2.0)
+  - JumioMobileSDK/JumioMobileSDK (3.2.0)
+  - JumioMobileSDK/Netverify (3.2.0)
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios`)
+  - jumio_flutter (from `.symlinks/plugins/jumio_flutter/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - JumioMobileSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+  jumio_flutter:
+    :path: ".symlinks/plugins/jumio_flutter/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  jumio_flutter: e5c118716cf39117cefc47780a85c17026b69387
+  JumioMobileSDK: c8932c25cfbcbc32acaadd0e7cf1b7946b2e8dfe
+
+PODFILE CHECKSUM: 2c26e2bafa90f053205a9e99ab1fdce88251e293
+
+COCOAPODS: 1.7.3
