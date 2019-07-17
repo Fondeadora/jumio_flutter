@@ -52,18 +52,15 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
 
     try {
       when (call.method) {
-        "init" -> {
+        "scanDocument" -> {
           val arguments = call.arguments as java.util.HashMap<String, String>
-          result.success(
-              initializeNetverifySDK(
-                arguments["apiKey"],
-                arguments["apiSecret"],
-                arguments["scanReference"],
-                arguments["userReference"]
-              )
+          initializeNetverifySDK(
+              arguments["apiKey"],
+              arguments["apiSecret"],
+              arguments["scanReference"],
+              arguments["userReference"]
           )
         }
-        "scanDocument" -> startDocumentScan()
         else -> result.notImplemented()
       }
     } catch(e: Exception) {
@@ -104,8 +101,12 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
 			netverifySDK.sendDebugInfoToJumio(false)
 
 			netverifySDK.initiate(object : NetverifyInitiateCallback {
-				override fun onNetverifyInitiateSuccess() {}
-				override fun onNetverifyInitiateError(errorCode: String, errorMessage: String, retryPossible: Boolean) {}
+				override fun onNetverifyInitiateSuccess() {
+          this@JumioFlutterPlugin.startDocumentScan()
+        }
+				override fun onNetverifyInitiateError(errorCode: String, errorMessage: String, retryPossible: Boolean) {
+          this@JumioFlutterPlugin.result.success(null)
+        }
 			})
 
     } catch (e: PlatformNotSupportedException) {
@@ -138,16 +139,15 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
         result.success(mapScanResults(data))
 
       } else if (resultCode == Activity.RESULT_CANCELED) {
-        val errorMessage = data?.getStringExtra(NetverifySDK.EXTRA_ERROR_MESSAGE)
-        val errorCode = data?.getStringExtra(NetverifySDK.EXTRA_ERROR_CODE)
-
-        result.error(errorCode, errorMessage, null)
+        result.success(null)
       }
 
       netverifySDK.destroy()
+
+      return true
     }
 
-    return true
+    return false
   }
 
   private fun mapScanResults(data: Intent?): HashMap<String, String?>{
@@ -165,21 +165,14 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
     resultMap["idNumber"] = documentData?.idNumber
     resultMap["issuingCountry"] = documentData?.issuingCountry
     resultMap["lastName"] = documentData?.lastName
-    resultMap["nameSuffix"] = documentData?.nameSuffix
     resultMap["optionalData1"] = documentData?.optionalData1
     resultMap["optionalData2"] = documentData?.optionalData2
     resultMap["originatingCountry"] = documentData?.originatingCountry
     resultMap["personalNumber"] = documentData?.personalNumber
-    resultMap["placeOfBirth"] = documentData?.placeOfBirth
     resultMap["postCode"] = documentData?.postCode
     resultMap["selectedCountry"] = documentData?.selectedCountry
-    resultMap["subdivision"] = documentData?.subdivision
-    resultMap["dob"] = if (documentData?.dob != null) dateFormat.format(documentData.dob) else null
-    resultMap["emrtdStatus"] = documentData?.emrtdStatus?.name
     resultMap["expiryDate"] = if(documentData?.expiryDate != null) dateFormat.format(documentData.expiryDate) else null
-    resultMap["extractionMethod"] = documentData?.extractionMethod?.name
     resultMap["gender"] = documentData?.gender?.name
-    resultMap["issuingDate"] = if (documentData?.issuingDate != null) dateFormat.format(documentData.issuingDate) else null
     resultMap["selectedDocumentType"] = documentData?.selectedDocumentType?.name
     resultMap["mrzLine1"] = documentData?.mrzData?.mrzLine1
     resultMap["mrzLine2"] = documentData?.mrzData?.mrzLine2
