@@ -144,16 +144,16 @@ public class SwiftJumioFlutterPlugin: NSObject, FlutterPlugin, NetverifyViewCont
     var documentTypeStr:String
     switch (documentData.selectedDocumentType) {
     case .driverLicense:
-      documentTypeStr = "driverLicense"
+      documentTypeStr = "DRIVER_LICENSE"
       break;
     case .identityCard:
-      documentTypeStr = "identityCard"
+      documentTypeStr = "IDENTITY_CARD"
       break;
     case .passport:
-      documentTypeStr = "passport"
+      documentTypeStr = "PASSPORT"
       break;
     case .visa:
-      documentTypeStr = "visa"
+      documentTypeStr = "VISA"
       break;
     default:
       documentTypeStr = ""
