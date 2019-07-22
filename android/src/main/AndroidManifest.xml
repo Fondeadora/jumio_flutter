@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:theme="@style/Theme.Netverify"
+            android:theme="@style/CustomNetverifyTheme"
             android:hardwareAccelerated="true"
             android:name="com.jumio.nv.NetverifyActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
