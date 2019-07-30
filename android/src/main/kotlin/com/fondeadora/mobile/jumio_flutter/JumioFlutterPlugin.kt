@@ -64,20 +64,21 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
         else -> result.notImplemented()
       }
     } catch(e: Exception) {
-      result.error("MethodCallError", e.message, e)
+      result.error("PlatformException", e.message, e)
     }
   }
 
-  private fun initializeNetverifySDK(apiKey: String?, apiSecret: String?, scanReference: String?, userReference: String?): Boolean {
+  private fun initializeNetverifySDK(apiKey: String?, apiSecret: String?, scanReference: String?, userReference: String?) {
     try {
-      if (!NetverifySDK.isSupportedPlatform(activity)) {
-        Log.w(TAG, "Device not supported")
-        return false
+      //TODO !
+      if (NetverifySDK.isSupportedPlatform(activity)) {
+        result.error("PlatformException", "Device not supported", null)
+        return
       }
 
       if (NetverifySDK.isRooted(activity)) {
-        Log.w(TAG, "Device is rooted")
-        return false
+        result.error("PlatformException", "Device rooted", null)
+        return
       }
 
       netverifySDK = NetverifySDK.create(activity, apiKey, apiSecret, JumioDataCenter.US)
@@ -110,14 +111,8 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
 			})
 
     } catch (e: PlatformNotSupportedException) {
-      Log.e(TAG, "Error in initializeNetverifySDK: ", e)
-      return false
-    } catch (e1: NullPointerException) {
-      Log.e(TAG, "Error in initializeNetverifySDK: ", e1)
-      return false
-    }
-
-    return true
+      result.error("PlatformException", "Error in initializeNetverifySDK", e)
+    } 
   }
 
   private fun startDocumentScan() {
