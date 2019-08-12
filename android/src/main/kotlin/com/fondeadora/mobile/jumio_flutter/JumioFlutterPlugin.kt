@@ -70,8 +70,7 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
 
   private fun initializeNetverifySDK(apiKey: String?, apiSecret: String?, scanReference: String?, userReference: String?) {
     try {
-      //TODO !
-      if (NetverifySDK.isSupportedPlatform(activity)) {
+      if (!NetverifySDK.isSupportedPlatform(activity)) {
         result.error("PlatformException", "Device not supported", null)
         return
       }
