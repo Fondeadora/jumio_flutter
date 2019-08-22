@@ -12,7 +12,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,15 +31,9 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _scanDocument() async {
     try {
-      var result = await JumioFlutter.scanDocument(
-        "b559ed03-499d-4571-92ed-8c493c5c2e0d",
-        "mlcp5SzKrEu0eUQW8ABHY1AzM6YsgjeV",
-        "scanReference",
-        "userReference",
-      );
+      var result = await JumioFlutter.scanDocument("", "", "", "");
 
       print("scan result: $result");
-
     } on PlatformException {
       print("Error");
     }

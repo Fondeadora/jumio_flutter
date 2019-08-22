@@ -1,7 +1,9 @@
 package com.fondeadora.mobile.jumio_flutter
 
 import android.app.Activity
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Parcelable
 import android.util.Log
@@ -29,8 +31,8 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
     PluginRegistry.ActivityResultListener,
     PluginRegistry.RequestPermissionsResultListener {
 
-  private lateinit var netverifySDK: NetverifySDK
-  private lateinit var result: Result
+  private var netverifySDK: NetverifySDK? = null
+  private var result: Result? = null
 
   companion object {
     private const val TAG = "JumioFlutterPlugin"
@@ -71,58 +73,58 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
   private fun initializeNetverifySDK(apiKey: String?, apiSecret: String?, scanReference: String?, userReference: String?) {
     try {
       if (!NetverifySDK.isSupportedPlatform(activity)) {
-        result.error("PlatformException", "Device not supported", null)
+        result?.error("PlatformException", "Device not supported", null)
         return
       }
 
       if (NetverifySDK.isRooted(activity)) {
-        result.error("PlatformException", "Device rooted", null)
+        result?.error("PlatformException", "Device rooted", null)
         return
       }
 
       netverifySDK = NetverifySDK.create(activity, apiKey, apiSecret, JumioDataCenter.US)
 
-      netverifySDK.setEnableVerification(true)
+      netverifySDK?.setEnableVerification(true)
 
 			val alpha3 = IsoCountryConverter.convertToAlpha3("MX")
-			netverifySDK.setPreselectedCountry(alpha3)
+			netverifySDK?.setPreselectedCountry(alpha3)
 
 			val documentTypes = ArrayList<NVDocumentType>()
 			documentTypes.add(NVDocumentType.PASSPORT)
       documentTypes.add(NVDocumentType.IDENTITY_CARD)
-			netverifySDK.setPreselectedDocumentTypes(documentTypes)
-			netverifySDK.setPreselectedDocumentVariant(NVDocumentVariant.PLASTIC)
+			netverifySDK?.setPreselectedDocumentTypes(documentTypes)
+			netverifySDK?.setPreselectedDocumentVariant(NVDocumentVariant.PLASTIC)
 
-			netverifySDK.setCustomerInternalReference(scanReference)
-      netverifySDK.setUserReference(userReference)
+			netverifySDK?.setCustomerInternalReference(scanReference)
+      netverifySDK?.setUserReference(userReference)
 
-			netverifySDK.setEnableEMRTD(false)
-			netverifySDK.setDataExtractionOnMobileOnly(false)
-			netverifySDK.sendDebugInfoToJumio(false)
+			netverifySDK?.setEnableEMRTD(false)
+			netverifySDK?.setDataExtractionOnMobileOnly(false)
+			netverifySDK?.sendDebugInfoToJumio(false)
 
-			netverifySDK.initiate(object : NetverifyInitiateCallback {
+			netverifySDK?.initiate(object : NetverifyInitiateCallback {
 				override fun onNetverifyInitiateSuccess() {
           this@JumioFlutterPlugin.startDocumentScan()
         }
 				override fun onNetverifyInitiateError(errorCode: String, errorMessage: String, retryPossible: Boolean) {
-          this@JumioFlutterPlugin.result.success(null)
+          this@JumioFlutterPlugin.result?.success(null)
         }
 			})
 
     } catch (e: PlatformNotSupportedException) {
-      result.error("PlatformException", "Error in initializeNetverifySDK", e)
+      result?.error("PlatformException", "Error in initializeNetverifySDK", e)
     } 
   }
 
   private fun startDocumentScan() {
     if (checkPermissions()) {
       try {
-        if (::netverifySDK.isInitialized) {
-          activity.startActivityForResult(netverifySDK.intent, NetverifySDK.REQUEST_CODE)
+        if (netverifySDK != null) {
+          activity.startActivityForResult(netverifySDK?.intent, NetverifySDK.REQUEST_CODE)
         }
       } catch (e: MissingPermissionException) {
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
-        result.success(HashMap<String, String>())
+        result?.success(HashMap<String, String>())
       }
     }
   }
@@ -130,18 +132,32 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
     if (requestCode == NetverifySDK.REQUEST_CODE) {
       if (resultCode == Activity.RESULT_OK) {
-        result.success(mapScanResults(data))
+        if(result == null) {
+          storePendingResult("OK")
+        } else {
+          result?.success(mapScanResults(data))
+        }
 
       } else if (resultCode == Activity.RESULT_CANCELED) {
-        result.success(null)
+        if(result == null) {
+          storePendingResult("CANCELED")
+        } else {
+          result?.success(null)
+        }
       }
 
-      netverifySDK.destroy()
+      netverifySDK?.destroy()
 
       return true
     }
 
     return false
+  }
+
+  private fun storePendingResult(status: String) {
+    val editor = activity.getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE).edit()
+    editor.putString("flutter.jumioPendingResult", status)
+    editor.apply()
   }
 
   private fun mapScanResults(data: Intent?): HashMap<String, String?>{
