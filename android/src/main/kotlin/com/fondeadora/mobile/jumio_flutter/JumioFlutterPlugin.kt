@@ -77,11 +77,6 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
         return
       }
 
-      if (NetverifySDK.isRooted(activity)) {
-        result?.error("PlatformException", "Device rooted", null)
-        return
-      }
-
       netverifySDK = NetverifySDK.create(activity, apiKey, apiSecret, JumioDataCenter.US)
 
       netverifySDK?.setEnableVerification(true)
