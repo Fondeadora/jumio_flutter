@@ -16,8 +16,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   
-  s.dependency 'JumioMobileSDK'
-  s.dependency 'JumioMobileSDK/Netverify'
+  s.dependency 'JumioMobileSDK/Netverify', '3.3.1'
   
   s.static_framework = true
 
