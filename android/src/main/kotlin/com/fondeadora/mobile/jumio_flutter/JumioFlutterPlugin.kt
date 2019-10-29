@@ -73,6 +73,8 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
   private fun initializeNetverifySDK(apiKey: String?, apiSecret: String?, scanReference: String?, userReference: String?) {
     try {
       if (!NetverifySDK.isSupportedPlatform(activity)) {
+        Log.e(TAG, "Device not supported")
+
         result?.error("PlatformException", "Device not supported", null)
         return
       }
@@ -81,32 +83,36 @@ class JumioFlutterPlugin(private var activity: Activity) : MethodCallHandler,
 
       netverifySDK?.setEnableVerification(true)
 
-			val alpha3 = IsoCountryConverter.convertToAlpha3("MX")
-			netverifySDK?.setPreselectedCountry(alpha3)
+      val alpha3 = IsoCountryConverter.convertToAlpha3("MX")
+      netverifySDK?.setPreselectedCountry(alpha3)
 
-			val documentTypes = ArrayList<NVDocumentType>()
-			documentTypes.add(NVDocumentType.PASSPORT)
+      val documentTypes = ArrayList<NVDocumentType>()
+      documentTypes.add(NVDocumentType.PASSPORT)
       documentTypes.add(NVDocumentType.IDENTITY_CARD)
-			netverifySDK?.setPreselectedDocumentTypes(documentTypes)
-			netverifySDK?.setPreselectedDocumentVariant(NVDocumentVariant.PLASTIC)
+      netverifySDK?.setPreselectedDocumentTypes(documentTypes)
+      netverifySDK?.setPreselectedDocumentVariant(NVDocumentVariant.PLASTIC)
 
-			netverifySDK?.setCustomerInternalReference(scanReference)
+      netverifySDK?.setCustomerInternalReference(scanReference)
       netverifySDK?.setUserReference(userReference)
 
-			netverifySDK?.setEnableEMRTD(false)
-			netverifySDK?.setDataExtractionOnMobileOnly(false)
-			netverifySDK?.sendDebugInfoToJumio(false)
+      netverifySDK?.setEnableEMRTD(false)
+      netverifySDK?.setDataExtractionOnMobileOnly(false)
+      netverifySDK?.sendDebugInfoToJumio(false)
 
-			netverifySDK?.initiate(object : NetverifyInitiateCallback {
-				override fun onNetverifyInitiateSuccess() {
+      netverifySDK?.initiate(object : NetverifyInitiateCallback {
+        override fun onNetverifyInitiateSuccess() {
           this@JumioFlutterPlugin.startDocumentScan()
         }
-				override fun onNetverifyInitiateError(errorCode: String, errorMessage: String, retryPossible: Boolean) {
-          this@JumioFlutterPlugin.result?.success(null)
+        override fun onNetverifyInitiateError(errorCode: String, errorMessage: String, retryPossible: Boolean) {
+          Log.e(TAG, "onNetverifyInitiateError: $errorCode $errorMessage $retryPossible")
+
+          this@JumioFlutterPlugin.result?.error(errorCode, errorMessage, "")
         }
-			})
+      })
 
     } catch (e: PlatformNotSupportedException) {
+      Log.e(TAG, "PlatformNotSupportedException: ${e.message}")
+
       result?.error("PlatformException", "Error in initializeNetverifySDK", e)
     } 
   }
