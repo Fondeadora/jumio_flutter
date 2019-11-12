@@ -31,7 +31,7 @@
       <!-- select document specific colors -->
 
       <item name="netverify_scanOptionsLoadingBackground">#ffffff</item>
-      <item name="netverify_scanOptionsItemBackground">#ffffff</item>
+      <item name="netverify_scanOptionsItemBackground">#FFFFFF</item>
       <item name="netverify_scanOptionsItemForeground">#000000</item>
       <item name="netverify_scanOptionsItemHeaderBackground">#F2F2F2</item>
 
@@ -43,8 +43,8 @@
       <!-- scan instructions specific colors -->
 
       <item name="netverify_helpBackground">#B3000000</item><!--70%-->
-      <item name="netverify_helpProgressString">#80ffffff</item>
-      <item name="netverify_helpTitle">#ffffff</item>
+      <item name="netverify_helpProgressString">#80FFFFFF</item>
+      <item name="netverify_helpTitle">#FFFFFF</item>
       <item name="netverify_helpImage">#FFFFFF</item>
       <item name="netverify_helpSeperator">#33FFFFFF</item>
       <item name="netverify_helpInstructions">#FFFFFF</item>
@@ -59,27 +59,28 @@
 
       <!-- 3d liveness specific colors -->
 
-      <item name="face_scanOverlayFeedbackText">#FFFFFF</item>
+      <item name="face_scanOverlayFeedbackText">#000000</item>
       <item name="face_scanOverlayBackground">#FF000000</item><!--100%-->
-      <item name="face_scanOverlayFeedbackBackground">#616161</item>
+      <item name="face_scanOverlayFeedbackBackground">#ffffff</item>
       <item name="face_scanOverlayOval">#FFFFFF</item>
-      <item name="face_scanOverlayProgress">#616161</item>
+      <item name="face_scanOverlayProgress">#ffffff</item>
       <item name="face_helpBackground">#B3000000</item><!--70%-->
-      <item name="face_helpProgressString">#80ffffff</item>
+      <item name="face_helpProgressString">#80FFFFFF</item>
       <item name="face_helpImage">#FFFFFF</item>
-      <item name="face_helpTitle">#ffffff</item>
+      <item name="face_helpTitle">#FFFFFF</item>
       <item name="face_helpSeperator">#33FFFFFF</item>
       <item name="face_helpInstructions">#FFFFFF</item>
       <item name="face_helpFallback">#FFFFFF</item>
       <item name="face_helpFallbackText">#222222</item>
       <item name="face_helpButtonTheme">@style/Netverify.Helpview.Button</item>
 
-      <!-- readability check specific colors -->
+      <!-- verification specific colors -->
 
-      <item name="netverify_confirmationBackground">#222222</item>
+      <item name="netverify_confirmationBackground">#000000</item>
       <item name="netverify_confirmationHintStyle">@style/Custom.Netverify.Confirmation.Hint</item>
-      <item name="netverify_confirmationPositiveStyle">@style/Jumio.Confirm.Button.Positive</item>
-      <item name="netverify_confirmationNegativeStyle">@style/Jumio.Confirm.Button.Negative</item>
+      <item name="netverify_confirmationPositiveStyle">@style/Netverify.Confirmation.MaterialButton</item>
+      <item name="netverify_confirmationNegativeStyle">@style/Netverify.Confirmation.MaterialButton.Outlined</item>
+      <item name="netverify_confirmationIcon">#FFFFFF</item>
 
       <!-- submission error (error screen) specific colors -->
 
@@ -88,7 +89,7 @@
       <item name="netverify_submissionErrorTitle">#424242</item>
       <item name="netverify_submissionErrorDescription">#757575</item>
       <item name="netverify_submissionErrorSeperator">#757575</item>
-      <item name="netverify_submissionErrorImage">#000000</item>
+      <item name="netverify_submissionErrorImage">#FFFFFF</item>
       <item name="netverify_submissionErrorButtonBackground">#FFFFFF</item>
       <item name="netverify_submissionErrorButtonText">#222222</item>
 
@@ -116,26 +117,26 @@
       <item name="android:textColor">#000000</item>
      </style>
 
-     <!-- positive button theme (readability screen) -->
+     <!-- positive button theme (verification screen) -->
 
-     <style name="Jumio.Confirm.Button.Positive" parent="">
-      <item name="android:textColor">#FFFFFF</item>
-      <item name="android:background">#000000</item>
+     <style name="Netverify.Confirmation.MaterialButton" parent="Widget.MaterialComponents.Button">
+      <item name="android:textColor">#000000</item>
+      <item name="android:backgroundTint">#fcfcfc</item>
      </style>
 
-     <!-- negative button theme (readability screen) -->
+     <!-- negative button theme (verification screen) -->
 
-     <style name="Jumio.Confirm.Button.Negative" parent="">
-      <item name="android:textColor">#FFFFFF</item>
-      <item name="android:background">#5f5f5f</item>
+     <style name="Netverify.Confirmation.MaterialButton.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+      <item name="android:textColor">#ffffff</item>
+      <item name="android:strokeColor">#ffffff</item>
      </style>
 
 
-     <!-- readability info theme (readability screen) -->
+     <!-- Verification info theme (verification screen) -->
 
      <style name="Custom.Netverify.Confirmation.Hint" parent="Netverify.Confirmation.Hint">
       <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark</item>
-      <item name="android:background">#323232</item>
+      <item name="android:background">#000000</item>
       <item name="android:textColor">#FFFFFF</item>
      </style>
 
