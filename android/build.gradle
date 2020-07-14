@@ -43,7 +43,7 @@ android {
 }
 
 ext {
-    JUMIO_SDK_VERSION = "3.4.0"
+    JUMIO_SDK_VERSION = "3.6.2"
 }
 
 dependencies {
